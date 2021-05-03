@@ -1,5 +1,7 @@
 # Name: Aleksi Hietala
 # Topic: Weather application to display weather of your location.
+## API used
+- Weather API https://openweathermap.org/api
 ## Possible list of extra features:
 -  Future weather
 -  Different location
