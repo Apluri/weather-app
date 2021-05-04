@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import fi.tiko.weatherapp.R
-import fi.tiko.weatherapp.data.EnviromentVariables
+import fi.tiko.weatherapp.data.EnvironmentVariables
 import fi.tiko.weatherapp.data.Request
 import kotlin.concurrent.thread
 
@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.d("Test1", "App launched!")
         thread {
-            Request("https://api.openweathermap.org/data/2.5/weather?q=tampere&appid=${EnviromentVariables().api}").run()
+            Request("https://api.openweathermap.org/data/2.5/weather?q=tampere&appid=${EnvironmentVariables().api}").run()
             runOnUiThread {
                 Toast.makeText(this, "Request performed", Toast.LENGTH_SHORT).show()
             }
