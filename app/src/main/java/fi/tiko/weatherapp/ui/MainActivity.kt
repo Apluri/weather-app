@@ -1,5 +1,6 @@
 package fi.tiko.weatherapp.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -16,8 +17,10 @@ import java.util.*
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
-    val city = "Tampere"
+    var city = "Tampere" // change to mobile location
+    lateinit var address : TextView
     lateinit var temperature : TextView
+    lateinit var updatedAt : TextView
     lateinit var status : TextView
     lateinit var sunrise : TextView
     lateinit var sunset : TextView
@@ -26,8 +29,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.d("Test1", "App launched!")
-        findViewById<TextView>(R.id.address).text = city
+        address = findViewById(R.id.address)
         temperature = findViewById(R.id.temp)
+        updatedAt = findViewById(R.id.updated_at)
         status = findViewById(R.id.status)
         sunrise = findViewById(R.id.sunrise)
         sunset = findViewById(R.id.sunset)
@@ -43,8 +47,9 @@ class MainActivity : AppCompatActivity() {
             val sys = jsonObj.getJSONObject("sys")
             runOnUiThread {
                 Toast.makeText(this, "Request performed", Toast.LENGTH_SHORT).show()
+                address.text = city
                 temperature.text = jsonObj.getJSONObject("main").getString("temp")+"°C"
-                findViewById<TextView>(R.id.updated_at).text = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(updateTime*1000))
+                updatedAt.text = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(updateTime*1000))
                 status.text = jsonObj.getJSONArray("weather").getJSONObject(0).getString("description")
                 sunrise.text = "Sunrise: " + SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sys.getLong("sunrise")*1000))
                 sunset.text = "Sunset: " + SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sys.getLong("sunset")*1000))
@@ -54,8 +59,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // TODO: 05/05/2021 Open settings activity
     fun openSettings(view : View) {
         Log.d("Test1", "open settings")
+        val intent = Intent(this, SettingsActivity::class.java).apply {
+            putExtra("currentCity", city)
+        }
+        startActivityForResult(intent, 10)
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 10) {
+            if(resultCode == RESULT_OK) {
+                val value = data?.extras?.getString("city")
+                Log.d("Test1", value)
+                if (value != null && value != city) city = value
+                updateUi()
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+
     }
 }
