@@ -23,3 +23,7 @@
 - Display current weather
 - Display one week forecast
 - Change location (not ready with new API call, does not actually fetch data from new city anymore)
+
+## Release1 screenshot
+
+![Release1 mainscreen](demoImages/mainActivityRelease1.jpg?raw=true)
