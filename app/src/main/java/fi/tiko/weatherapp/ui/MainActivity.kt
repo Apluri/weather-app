@@ -5,10 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ListView
-import android.widget.SimpleAdapter
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import fi.tiko.weatherapp.R
 import fi.tiko.weatherapp.data.EnvironmentVariables
 import fi.tiko.weatherapp.data.Request
@@ -31,26 +28,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.d("Test1", "App launched!")
         updateUi()
-
-        // Test data for listview
-        var listView = findViewById<ListView>(R.id.dailyList)
-        var list = mutableListOf<WeatherRowModel>()
-        list.add(WeatherRowModel("Today", "4°C / -1°C", "Cloudy"))
-        list.add(WeatherRowModel("Tomorrow", "14°C / 4°C", "Sunny"))
-        list.add(WeatherRowModel("Wednesday", "12°C / 5°C", "Broken clouds"))
-        list.add(WeatherRowModel("Thursday", "6°C / -4°C", "Rainy"))
-        list.add(WeatherRowModel("Friday", "14°C / 4°C", "Sunny"))
-        list.add(WeatherRowModel("Saturday", "17°C / 8°C", "Sunny"))
-        list.add(WeatherRowModel("Sunday", "25°C / 19°C", "Sunny"))
-
-
-
-        listView.adapter = WeatherAdapter(this, R.layout.row, list)
-
-
-
     }
 
     private fun updateUi() {
@@ -64,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateCurrentWeatherView(currentWeather : JSONObject) {
-        val temp = currentWeather.getString("temp")+"°C"
+        val temp = currentWeather.getString("temp").toDouble().toInt().toString()+"°C" // remove decimals
         val updateTime = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(currentWeather.getLong("dt")*1000))
         val weatherDescription = currentWeather.getJSONArray("weather").getJSONObject(0).getString("description")
         val sunrise = "Sunrise: " + SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(currentWeather.getLong("sunrise")*1000))
@@ -81,7 +59,45 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateDailyWeatherView(dailyWeather : JSONArray) {
-        // TODO: 07/05/2021 Implement this
+        var forecastList = mutableListOf<WeatherRowModel>()
+
+        // fill forecastList with weather rows
+        for (i in 0 until dailyWeather.length()) {
+            val weatherData = dailyWeather.getJSONObject(i)
+
+            var day : String? = when (i) {
+                0 -> "Today"
+                1 -> "Tomorrow"
+                else -> getDayOfWeek(Date(weatherData.getLong("dt") * 1000))
+            }
+
+            val temp = weatherData.getJSONObject("temp")
+            // remove decimals
+            val max = temp.getString("max").toDouble().toInt()
+            val min = temp.getString("min").toDouble().toInt()
+            val temperatures = "$max°C / $min°C"
+
+            val statusImg = weatherData.getJSONArray("weather").getJSONObject(0).getString("description") // Change to icon
+
+            forecastList.add(WeatherRowModel(day?: "error", temperatures, statusImg))
+
+        }
+        runOnUiThread {
+            findViewById<ListView>(R.id.dailyList).adapter = WeatherAdapter(this, R.layout.row, forecastList)
+        }
+    }
+
+    private fun getDayOfWeek(date : Date) : String? {
+        return when (date.day) {
+            0 -> "Sunday"
+            1 -> "Monday"
+            2 -> "Tuesday"
+            3 -> "Wednesday"
+            4 -> "Thursday"
+            5 -> "Friday"
+            6 -> "Saturday"
+            else -> null
+        }
     }
     fun openSettings(view : View) {
         Log.d("Test1", "open settings")
