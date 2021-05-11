@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ListView
 import android.widget.SimpleAdapter
 import android.widget.TextView
 import android.widget.Toast
@@ -32,6 +33,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.d("Test1", "App launched!")
         updateUi()
+
+        // Test data for listview
+        var listView = findViewById<ListView>(R.id.dailyList)
+        var list = mutableListOf<WeatherRowModel>()
+        list.add(WeatherRowModel("Today", "4°C / -1°C", "Cloudy"))
+        list.add(WeatherRowModel("Tomorrow", "14°C / 4°C", "Sunny"))
+        list.add(WeatherRowModel("Wednesday", "12°C / 5°C", "Broken clouds"))
+        list.add(WeatherRowModel("Thursday", "6°C / -4°C", "Rainy"))
+        list.add(WeatherRowModel("Friday", "14°C / 4°C", "Sunny"))
+        list.add(WeatherRowModel("Saturday", "17°C / 8°C", "Sunny"))
+        list.add(WeatherRowModel("Sunday", "25°C / 19°C", "Sunny"))
+
+
+
+        listView.adapter = WeatherAdapter(this, R.layout.row, list)
+
+
 
     }
 
