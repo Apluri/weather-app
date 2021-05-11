@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import com.bumptech.glide.Glide
 import fi.tiko.weatherapp.R
 import fi.tiko.weatherapp.data.EnvironmentVariables
 import fi.tiko.weatherapp.data.Request
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         updateUi()
+
     }
 
     private fun updateUi() {
@@ -44,7 +46,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateCurrentWeatherView(currentWeather : JSONObject) {
         val temp = currentWeather.getString("temp").toDouble().toInt().toString()+"°C" // remove decimals
         val updateTime = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(currentWeather.getLong("dt")*1000))
-        val weatherDescription = currentWeather.getJSONArray("weather").getJSONObject(0).getString("description")
+        val icon = currentWeather.getJSONArray("weather").getJSONObject(0).getString("icon")
         val sunrise = "Sunrise: " + SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(currentWeather.getLong("sunrise")*1000))
         val sunset = "Sunset: " + SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(currentWeather.getLong("sunset")*1000))
         runOnUiThread {
@@ -52,7 +54,10 @@ class MainActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.address).text = city
             findViewById<TextView>(R.id.temp).text = temp
             findViewById<TextView>(R.id.updated_at).text = updateTime
-            findViewById<TextView>(R.id.status).text = weatherDescription
+            Glide.with(this)
+                    .load("https://openweathermap.org/img/wn/$icon@2x.png")
+                    .placeholder(R.drawable.error)
+                    .into(findViewById<ImageView>(R.id.statusMain))
             findViewById<TextView>(R.id.sunrise).text = sunrise
             findViewById<TextView>(R.id.sunset).text = sunset
         }
@@ -77,9 +82,10 @@ class MainActivity : AppCompatActivity() {
             val min = temp.getString("min").toDouble().toInt()
             val temperatures = "$max°C / $min°C"
 
-            val statusImg = weatherData.getJSONArray("weather").getJSONObject(0).getString("description") // Change to icon
+            val icon = weatherData.getJSONArray("weather").getJSONObject(0).getString("icon")
+            val statusImgUrl = "https://openweathermap.org/img/wn/$icon@2x.png"
 
-            forecastList.add(WeatherRowModel(day?: "error", temperatures, statusImg))
+            forecastList.add(WeatherRowModel(day?: "error", temperatures, statusImgUrl))
 
         }
         runOnUiThread {

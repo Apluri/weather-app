@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import fi.tiko.weatherapp.R
 
 class WeatherAdapter (var mCtx: Context, var resources: Int, var items: List<WeatherRowModel>): ArrayAdapter<WeatherRowModel>(mCtx, resources, items){
@@ -16,12 +17,16 @@ class WeatherAdapter (var mCtx: Context, var resources: Int, var items: List<Wea
 
         val dayOfWeather:TextView = view.findViewById(R.id.dayOfWeather)
         val temperatures:TextView = view.findViewById(R.id.temperatures)
-        val statusImg:TextView = view.findViewById(R.id.statusImg)
+        val statusImg:ImageView = view.findViewById(R.id.statusImg)
+
 
         val mItem:WeatherRowModel = items[position]
         dayOfWeather.text = mItem.day
-        statusImg.text = mItem.statusImg
         temperatures.text = mItem.temperatures
+        Glide.with(mCtx)
+            .load(mItem.statusImgUrl)
+            .placeholder(R.drawable.error)
+            .into(statusImg)
 
         return view
     }

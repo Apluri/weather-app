@@ -2,31 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
     <TextView
         android:id="@+id/dayOfWeather"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_gravity="center"
         android:layout_toStartOf="@+id/statusImg"
+        android:layout_weight="1"
+
         android:text="Monday" />
 
-    <TextView
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/statusImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Sunny day"
-        android:gravity="center"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_gravity="center"
+        />
 
     <TextView
         android:id="@+id/temperatures"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="right"
+        android:layout_gravity="center"
         android:text="6°C / -1°C" />
 
 
