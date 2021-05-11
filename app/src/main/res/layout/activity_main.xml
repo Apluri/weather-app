@@ -6,20 +6,31 @@
     android:padding="25dp"
     android:background="@drawable/bkimage">
 
-    <RelativeLayout android:id="@+id/mainContainer" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:visibility="visible">
+    <RelativeLayout
+        android:id="@+id/mainContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
-        <LinearLayout android:id="@+id/overviewContainer" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="vertical"
+        <LinearLayout
+            android:id="@+id/overviewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:background="@drawable/rounded_linear_bg"
            >
-            <TextView android:id="@+id/address" android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:textSize="24dp"
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24dp"
                 android:layout_gravity="center"
                 android:text="Tampere, FI" />
 
 
-            <TextView android:id="@+id/updated_at" android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/updated_at"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:textSize="14dp"
                 android:layout_gravity="center"
                 android:text="20 April 2012, 20:08 PM" />
@@ -30,9 +41,13 @@
                 android:orientation="horizontal"
                 android:layout_gravity="center">
 
-                <TextView android:id="@+id/temp" android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:textSize="90dp"
-                    android:fontFamily="sans-serif-thin" android:layout_gravity="center"
+                <TextView
+                    android:id="@+id/temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="90dp"
+                    android:fontFamily="sans-serif-thin"
+                    android:layout_gravity="center"
                     android:text="29°C"/>
                 <ImageView
                     android:id="@+id/statusMain"
@@ -43,14 +58,28 @@
             </LinearLayout>
 
 
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:gravity="center">
-                <TextView android:id="@+id/sunrise" android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:text="Sunrise: 05:05 AM"/>
-                <Space android:layout_width="50dp" android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="10dp"
+                >
+                <TextView
+                    android:id="@+id/sunrise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sunrise: 05:05 AM"/>
 
-                <TextView android:id="@+id/sunset" android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:text="Sunset: 05:05 PM"/>
+                <Space
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/sunset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sunset: 05:05 PM"/>
 
             </LinearLayout>
 
@@ -75,7 +104,7 @@
                android:layout_height="match_parent"
                android:id="@+id/dailyList"
                >
-               <!-- row xml here -->
+               <!-- row comes here xml here -->
            </ListView>
 
 
