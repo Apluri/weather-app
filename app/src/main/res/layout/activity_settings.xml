@@ -21,10 +21,14 @@
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="30sp" />
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="possible other edits"/>
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="getLocation"
+                android:text="Get location" />
         </LinearLayout>
 
         <Button
@@ -35,6 +39,8 @@
             android:layout_marginBottom="4dp"
             android:text="Save"
             android:onClick="save"/>
+
+
 
     </RelativeLayout>
 

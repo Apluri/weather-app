@@ -1,6 +1,7 @@
 package fi.tiko.weatherapp.ui
 
 import android.content.Intent
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -26,10 +27,12 @@ class MainActivity : AppCompatActivity() {
     var lat = 61.48
     var lon = 23.50
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         updateUi()
+
 
     }
 
