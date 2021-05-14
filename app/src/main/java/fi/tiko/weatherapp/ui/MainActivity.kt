@@ -10,6 +10,7 @@ import android.widget.*
 import com.bumptech.glide.Glide
 import fi.tiko.weatherapp.R
 import fi.tiko.weatherapp.data.EnvironmentVariables
+import fi.tiko.weatherapp.data.LocationData
 import fi.tiko.weatherapp.data.Request
 import org.json.JSONArray
 import org.json.JSONObject
@@ -21,18 +22,23 @@ class MainActivity : AppCompatActivity() {
     private val apiKey = EnvironmentVariables().apiKey
 
     // TODO: 07/05/2021 Changing city does not do anything anymore due new api call, implement conversion to lat and long
-    var city = "Nokia" // change to mobile location
+    var city = ""
 
-    // TODO: 07/05/2021 change to dynamically change based on location or by city given
-    var lat = 61.48
-    var lon = 23.50
-
+    var lat : Double = 0.0
+    var lon : Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        updateUi()
 
+        Log.d("Test1", "On create")
+        // TODO implement scenarios when gps data fails
+         LocationData(this,this).getLastLocation {  location, city ->
+             lat = location.latitude
+             lon = location.longitude
+             this.city = city
+             updateUi()
+        }
 
     }
 
@@ -120,8 +126,11 @@ class MainActivity : AppCompatActivity() {
             if(resultCode == RESULT_OK) {
                 val value = data?.extras?.getString("city")
                 Log.d("Test1", value)
-                if (value != null && value != city) city = value
-                updateUi()
+                // update if city changes
+                if (value != null && value != city) {
+                    city = value             
+                    updateUi()
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
