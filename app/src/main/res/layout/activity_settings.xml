@@ -6,43 +6,56 @@
     android:padding="25dp"
     android:background="@drawable/bkimage">
 
-    <RelativeLayout android:id="@+id/mainContainer" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:visibility="visible">
+    <LinearLayout
+        android:id="@+id/mainContainer"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/rounded_linear_bg">
-            <EditText
-                android:id="@+id/editCity"
+            android:orientation="horizontal">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="City"/>
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="30sp" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:onClick="getLocation"
-                android:text="Get GPS location" />
+                android:orientation="horizontal"
+                android:padding="20px"
+                android:background="@drawable/rounded_linear_bg">
+                <EditText
+                    android:id="@+id/editCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="name of city"
+                    />
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/marker"
+                    android:onClick="getLocation"/>
+
+            </LinearLayout>
+
+
+
+
         </LinearLayout>
+
+
+
+
 
         <Button
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="4dp"
-            android:text="Save"
-            android:onClick="save"/>
+            android:onClick="save"
+            android:text="Save" />
 
 
-
-    </RelativeLayout>
+    </LinearLayout>
 
 
 </RelativeLayout>
