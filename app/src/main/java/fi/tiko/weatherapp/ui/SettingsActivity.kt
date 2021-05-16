@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 import fi.tiko.weatherapp.R
+import fi.tiko.weatherapp.data.LocationData
 import java.util.jar.Manifest
 
 
@@ -33,6 +34,12 @@ class SettingsActivity : AppCompatActivity() {
         intent.putExtra("city", city.text.toString())
         setResult(RESULT_OK, intent);
         finish()
+    }
+
+    fun getLocation(view : View) {
+        LocationData(this,this).getLastLocation { location, city ->
+            this.city.setText(city)
+        }
     }
 
 }

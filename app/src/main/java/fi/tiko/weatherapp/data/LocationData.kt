@@ -7,24 +7,24 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 import java.util.*
 
 class LocationData(val context : Context, val activity: Activity) {
-    private var PERMISSION_ID = 80
-    private var fusedLocationProviderClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+    private val PERMISSION_ID = 80
+    private val fusedLocationProviderClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
     private lateinit var locationRequest : LocationRequest
 
 
     // tries to get last known location, if success then calls lamda with location
     fun getLastLocation(callback : (location : Location, city : String) -> Unit) {
         if (checkLocationPermissions()) {
-
             if (isLocationEnabled()) {
                 fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
-                    var location : Location? = task.result
+                    val location : Location? = task.result
                     if (location == null) {
                         getNewLocation()
                     } else {

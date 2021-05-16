@@ -1,6 +1,7 @@
 package fi.tiko.weatherapp.ui
 
 import android.content.Intent
+import android.location.Geocoder
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,8 @@ import fi.tiko.weatherapp.data.LocationData
 import fi.tiko.weatherapp.data.Request
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.IOException
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
@@ -31,7 +34,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d("Test1", "On create")
         // TODO implement scenarios when gps data fails
          LocationData(this,this).getLastLocation {  location, city ->
              lat = location.latitude
@@ -121,15 +123,34 @@ class MainActivity : AppCompatActivity() {
         }
         startActivityForResult(intent, 10)
     }
+
+    private fun changeLocation(cityName : String) {
+        try {
+            var geocoder = Geocoder(this, Locale.getDefault())
+            var adresses = geocoder.getFromLocationName(cityName, 1)
+
+            if (adresses.isNotEmpty()) {
+                lat = adresses[0].latitude
+                lon = adresses[0].longitude
+                // uppercase first letter
+                city = cityName.toLowerCase()
+                city = city[0].toUpperCase() + city.removeRange(0..0)
+                updateUi()
+            } else {
+                Toast.makeText(this, "Could not find location with name $cityName", Toast.LENGTH_SHORT).show()
+            }
+
+        } catch (e : Exception) {
+            Log.d("Test2", e.toString())
+        }
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 10) {
             if(resultCode == RESULT_OK) {
-                val value = data?.extras?.getString("city")
-                Log.d("Test1", value)
+                val cityName = data?.extras?.getString("city")
                 // update if city changes
-                if (value != null && value != city) {
-                    city = value             
-                    updateUi()
+                if (cityName != null && cityName.toLowerCase() != city.toLowerCase()) {
+                    changeLocation(cityName)
                 }
             }
         }

@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="getLocation"
-                android:text="Get location" />
+                android:text="Get GPS location" />
         </LinearLayout>
 
         <Button
