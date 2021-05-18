@@ -2,20 +2,20 @@ package fi.tiko.weatherapp.ui
 
 import android.content.Intent
 import android.location.Geocoder
-import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
 import com.bumptech.glide.Glide
+import com.fasterxml.jackson.databind.ObjectMapper
 import fi.tiko.weatherapp.R
 import fi.tiko.weatherapp.data.EnvironmentVariables
 import fi.tiko.weatherapp.data.LocationData
 import fi.tiko.weatherapp.data.Request
+import fi.tiko.weatherapp.data.WeatherJsonObject
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.IOException
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -47,10 +47,13 @@ class MainActivity : AppCompatActivity() {
     private fun updateUi() {
         thread {
             val weatherInfo : JSONObject = Request("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&units=metric&exclude=minutely,hourly,alerts&appid=$apiKey").getJsonObj()
+            // TODO convert program to use this
+            val weatherJson = Request("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&units=metric&exclude=minutely,hourly,alerts&appid=$apiKey").getWeatherJsonObj()
             val currentWeather : JSONObject = weatherInfo.getJSONObject("current")
             val dailyWeather : JSONArray = weatherInfo.getJSONArray("daily")
             updateCurrentWeatherView(currentWeather)
             updateDailyWeatherView(dailyWeather)
+
         }
     }
 
