@@ -8,25 +8,19 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import com.bumptech.glide.Glide
-import com.fasterxml.jackson.databind.ObjectMapper
 import fi.tiko.weatherapp.R
 import fi.tiko.weatherapp.data.EnvironmentVariables
 import fi.tiko.weatherapp.data.LocationData
 import fi.tiko.weatherapp.data.Request
-import fi.tiko.weatherapp.data.WeatherJsonObject
-import org.json.JSONArray
-import org.json.JSONObject
+import fi.tiko.weatherapp.data.weatherJsonFiles.WeatherJsonObject
 import java.lang.Exception
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     private val apiKey = EnvironmentVariables().apiKey
 
-    // TODO: 07/05/2021 Changing city does not do anything anymore due new api call, implement conversion to lat and long
     var city = ""
-
     var lat : Double = 0.0
     var lon : Double = 0.0
 
@@ -44,32 +38,33 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun getIconUrl(icon : String) : String {
+        return "https://openweathermap.org/img/wn/$icon@2x.png"
+    }
     private fun updateUi() {
         thread {
-            val weatherInfo : JSONObject = Request("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&units=metric&exclude=minutely,hourly,alerts&appid=$apiKey").getJsonObj()
-            // TODO convert program to use this
-            val weatherJson = Request("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&units=metric&exclude=minutely,hourly,alerts&appid=$apiKey").getWeatherJsonObj()
-            val currentWeather : JSONObject = weatherInfo.getJSONObject("current")
-            val dailyWeather : JSONArray = weatherInfo.getJSONArray("daily")
-            updateCurrentWeatherView(currentWeather)
-            updateDailyWeatherView(dailyWeather)
-
+            val weatherJson : WeatherJsonObject? = Request("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&units=metric&exclude=minutely,hourly,alerts&appid=$apiKey")
+                .getWeatherJsonObj()
+            if (weatherJson != null) {
+                updateCurrentWeatherView(weatherJson)
+                updateDailyWeatherView(weatherJson)
+            }
         }
     }
 
-    private fun updateCurrentWeatherView(currentWeather : JSONObject) {
-        val temp = currentWeather.getString("temp").toDouble().toInt().toString()+"°C" // remove decimals
-        val updateTime = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(currentWeather.getLong("dt")*1000))
-        val icon = currentWeather.getJSONArray("weather").getJSONObject(0).getString("icon")
-        val sunrise = "Sunrise: " + SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(currentWeather.getLong("sunrise")*1000))
-        val sunset = "Sunset: " + SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(currentWeather.getLong("sunset")*1000))
+    private fun updateCurrentWeatherView(weatherJson : WeatherJsonObject) {
+        val temp = weatherJson.current?.temp?.toInt().toString() // remove decimals
+        val updateTime = weatherJson.current?.getUpdateTime()
+        val icon = weatherJson.current?.weather?.get(0)?.icon
+        val sunrise = "Sunrise: " + weatherJson.current?.getSunriseTime()
+        val sunset = "Sunset: " + weatherJson.current?.getSunsetTime()
+
         runOnUiThread {
-            Toast.makeText(this, "Request performed", Toast.LENGTH_SHORT).show()
             findViewById<TextView>(R.id.address).text = city
             findViewById<TextView>(R.id.temp).text = temp
             findViewById<TextView>(R.id.updated_at).text = updateTime
             Glide.with(this)
-                    .load("https://openweathermap.org/img/wn/$icon@2x.png")
+                    .load(getIconUrl(icon!!))
                     .placeholder(R.drawable.error)
                     .into(findViewById<ImageView>(R.id.statusMain))
             findViewById<TextView>(R.id.sunrise).text = sunrise
@@ -77,31 +72,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateDailyWeatherView(dailyWeather : JSONArray) {
+
+    private fun updateDailyWeatherView(weatherJson : WeatherJsonObject) {
         var forecastList = mutableListOf<WeatherRowModel>()
 
-        // fill forecastList with weather rows
-        for (i in 0 until dailyWeather.length()) {
-            val weatherData = dailyWeather.getJSONObject(i)
-
-            var day : String? = when (i) {
+        var count = 0
+        weatherJson.daily?.forEach { forecast ->
+            var day : String? = when (count) {
                 0 -> "Today"
                 1 -> "Tomorrow"
-                else -> getDayOfWeek(Date(weatherData.getLong("dt") * 1000))
+                else -> getDayOfWeek(forecast?.getDtAsDate()!!)
             }
-
-            val temp = weatherData.getJSONObject("temp")
+            count += 1
             // remove decimals
-            val max = temp.getString("max").toDouble().toInt()
-            val min = temp.getString("min").toDouble().toInt()
+            val max = forecast?.temp?.max?.toInt()
+            val min = forecast?.temp?.min?.toInt()
             val temperatures = "$max°C / $min°C"
 
-            val icon = weatherData.getJSONArray("weather").getJSONObject(0).getString("icon")
-            val statusImgUrl = "https://openweathermap.org/img/wn/$icon@2x.png"
+            val icon = forecast?.weather?.get(0)?.icon
 
-            forecastList.add(WeatherRowModel(day?: "error", temperatures, statusImgUrl))
-
+            forecastList.add(WeatherRowModel(day?: "error", temperatures, getIconUrl(icon!!)))
         }
+
         runOnUiThread {
             findViewById<ListView>(R.id.dailyList).adapter = WeatherAdapter(this, R.layout.row, forecastList)
         }
@@ -120,10 +112,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     fun openSettings(view : View) {
-        Log.d("Test1", "open settings")
-        val intent = Intent(this, SettingsActivity::class.java).apply {
-            putExtra("currentCity", city)
-        }
+        val intent = Intent(this, SettingsActivity::class.java)
         startActivityForResult(intent, 10)
     }
 

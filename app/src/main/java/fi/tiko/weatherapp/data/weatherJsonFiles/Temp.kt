@@ -1,13 +1,17 @@
-package fi.tiko.weatherapp.data
+package fi.tiko.weatherapp.data.weatherJsonFiles
 
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class FeelsLike(
+data class Temp(
     @JsonProperty("day")
     val day: Double?,
     @JsonProperty("eve")
     val eve: Double?,
+    @JsonProperty("max")
+    val max: Double?,
+    @JsonProperty("min")
+    val min: Double?,
     @JsonProperty("morn")
     val morn: Double?,
     @JsonProperty("night")

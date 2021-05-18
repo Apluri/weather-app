@@ -1,7 +1,7 @@
 package fi.tiko.weatherapp.data
 
-import android.util.Log
 import com.fasterxml.jackson.databind.ObjectMapper
+import fi.tiko.weatherapp.data.weatherJsonFiles.WeatherJsonObject
 import org.json.JSONObject
 import java.net.URL
 

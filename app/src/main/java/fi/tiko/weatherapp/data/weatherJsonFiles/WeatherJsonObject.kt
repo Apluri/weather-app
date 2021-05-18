@@ -1,4 +1,4 @@
-package fi.tiko.weatherapp.data
+package fi.tiko.weatherapp.data.weatherJsonFiles
 
 
 import com.fasterxml.jackson.annotation.JsonProperty

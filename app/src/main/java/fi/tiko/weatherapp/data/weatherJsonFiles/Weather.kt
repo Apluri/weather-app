@@ -1,9 +1,9 @@
-package fi.tiko.weatherapp.data
+package fi.tiko.weatherapp.data.weatherJsonFiles
 
 
 import com.fasterxml.jackson.annotation.JsonProperty
-/*
-data class WeatherX(
+
+data class Weather(
     @JsonProperty("description")
     val description: String?,
     @JsonProperty("icon")
@@ -13,5 +13,3 @@ data class WeatherX(
     @JsonProperty("main")
     val main: String?
 )
-
- */

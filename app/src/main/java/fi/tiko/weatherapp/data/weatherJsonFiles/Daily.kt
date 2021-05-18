@@ -1,7 +1,8 @@
-package fi.tiko.weatherapp.data
+package fi.tiko.weatherapp.data.weatherJsonFiles
 
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.*
 
 data class Daily(
     @JsonProperty("clouds")
@@ -42,4 +43,9 @@ data class Daily(
     val windGust: Double?,
     @JsonProperty("wind_speed")
     val windSpeed: Double?
-)
+) {
+    fun getDtAsDate() : Date? {
+        if (dt != null) return Date(dt?.toLong() * 1000)
+        return null
+    }
+}
