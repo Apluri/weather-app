@@ -37,7 +37,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     fun getLocation(view : View) {
-        LocationData(this,this).getLastLocation { location, city ->
+        LocationData(this,this).getLastLocation { _, city ->
             this.city.setText(city)
         }
     }

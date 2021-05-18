@@ -11,9 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_toStartOf="@+id/statusImg"
-        android:layout_weight="1"
-
-        android:text="Monday" />
+        android:layout_weight="1" />
 
     <ImageView
         android:layout_width="50dp"
@@ -28,8 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="right"
-        android:layout_gravity="center"
-        android:text="6°C / -1°C" />
+        android:layout_gravity="center" />
 
 
 </LinearLayout>

@@ -20,9 +20,9 @@ import kotlin.concurrent.thread
 class MainActivity : AppCompatActivity() {
     private val apiKey = EnvironmentVariables().apiKey
 
-    var city = ""
-    var lat : Double = 0.0
-    var lon : Double = 0.0
+    var city : String = ""
+    var latitude : Double = 0.0
+    var longitude : Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +30,11 @@ class MainActivity : AppCompatActivity() {
 
         // TODO implement scenarios when gps data fails
          LocationData(this,this).getLastLocation {  location, city ->
-             lat = location.latitude
-             lon = location.longitude
+             latitude = location.latitude
+             longitude = location.longitude
              this.city = city
              updateUi()
-        }
+         }
 
     }
 
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun updateUi() {
         thread {
-            val weatherJson : WeatherJsonObject? = Request("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&units=metric&exclude=minutely,hourly,alerts&appid=$apiKey")
+            val weatherJson : WeatherJsonObject? = Request("https://api.openweathermap.org/data/2.5/onecall?lat=$latitude&lon=$longitude&units=metric&exclude=minutely,hourly,alerts&appid=$apiKey")
                 .getWeatherJsonObj()
             if (weatherJson != null) {
                 updateCurrentWeatherView(weatherJson)
@@ -76,15 +76,13 @@ class MainActivity : AppCompatActivity() {
     private fun updateDailyWeatherView(weatherJson : WeatherJsonObject) {
         var forecastList = mutableListOf<WeatherRowModel>()
 
-        var count = 0
-        weatherJson.daily?.forEach { forecast ->
-            var day : String? = when (count) {
+        weatherJson.daily?.forEachIndexed { index, forecast ->
+            var day : String? = when (index) {
                 0 -> "Today"
                 1 -> "Tomorrow"
                 else -> getDayOfWeek(forecast?.getDtAsDate()!!)
             }
-            count += 1
-            // remove decimals
+
             val max = forecast?.temp?.max?.toInt()
             val min = forecast?.temp?.min?.toInt()
             val temperatures = "$max°C / $min°C"
@@ -117,36 +115,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeLocation(cityName : String) {
-        try {
-            var geocoder = Geocoder(this, Locale.getDefault())
-            var adresses = geocoder.getFromLocationName(cityName, 1)
-
-            if (adresses.isNotEmpty()) {
-                lat = adresses[0].latitude
-                lon = adresses[0].longitude
-                // uppercase first letter
-                city = cityName.toLowerCase()
-                city = city[0].toUpperCase() + city.removeRange(0..0)
-                updateUi()
-            } else {
-                Toast.makeText(this, "Could not find location with name $cityName", Toast.LENGTH_SHORT).show()
-            }
-
-        } catch (e : Exception) {
-            Log.d("Test2", e.toString())
+        var geocoder = Geocoder(this, Locale.getDefault())
+        var adresses = geocoder.getFromLocationName(cityName, 1)
+        if (adresses.isNotEmpty()) {
+            latitude = adresses[0].latitude
+            longitude = adresses[0].longitude
+            city = cityName.capitalize()
+            updateUi()
+        } else {
+            Toast.makeText(this, "Could not find location with name $cityName", Toast.LENGTH_SHORT).show()
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 10) {
-            if(resultCode == RESULT_OK) {
-                val cityName = data?.extras?.getString("city")
-                // update if city changes
-                if (cityName != null && cityName.toLowerCase() != city.toLowerCase()) {
-                    changeLocation(cityName)
-                }
+        if (requestCode == 10 && resultCode == RESULT_OK) {
+            val cityName = data?.extras?.getString("city")
+            if (cityName != null && !isCityNamesSame(cityName)) {
+                changeLocation(cityName)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
-
+8
     }
+
+    private fun isCityNamesSame(cityName: String) = cityName.equals(city, ignoreCase = true)
 }

@@ -20,11 +20,11 @@ class WeatherAdapter (var mCtx: Context, var resources: Int, var items: List<Wea
         val statusImg:ImageView = view.findViewById(R.id.statusImg)
 
 
-        val mItem:WeatherRowModel = items[position]
-        dayOfWeather.text = mItem.day
-        temperatures.text = mItem.temperatures
+        val rowItem:WeatherRowModel = items[position]
+        dayOfWeather.text = rowItem.day
+        temperatures.text = rowItem.temperatures
         Glide.with(mCtx)
-            .load(mItem.statusImgUrl)
+            .load(rowItem.statusImgUrl)
             .placeholder(R.drawable.error)
             .into(statusImg)
 

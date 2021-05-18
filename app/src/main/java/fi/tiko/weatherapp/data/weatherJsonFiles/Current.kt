@@ -1,13 +1,12 @@
 package fi.tiko.weatherapp.data.weatherJsonFiles
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.text.SimpleDateFormat
 import java.util.*
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Current(
-    @JsonProperty("clouds")
-    val clouds: Int?,
     @JsonProperty("dew_point")
     val dewPoint: Double?,
     @JsonProperty("dt")
@@ -38,15 +37,12 @@ data class Current(
     val windSpeed: Double?
 ) {
     fun getUpdateTime() : String? {
-        if (dt != null) return SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(dt.toLong() * 1000))
-        return null
+        return if (dt != null) return SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(dt.toLong() * 1000)) else null
     }
     fun getSunriseTime() : String? {
-        if (sunrise != null) return SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sunrise?.toLong() * 1000))
-        return null
+        return if (sunrise != null) return SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sunrise?.toLong() * 1000)) else null
     }
     fun getSunsetTime() : String? {
-        if (sunset != null) return SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sunset?.toLong() * 1000))
-        return null
+        return if (sunset != null) return SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sunset?.toLong() * 1000)) else null
     }
 }
