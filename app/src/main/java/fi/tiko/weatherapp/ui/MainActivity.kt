@@ -48,6 +48,10 @@ class MainActivity : AppCompatActivity() {
             if (weatherJson != null) {
                 updateCurrentWeatherView(weatherJson)
                 updateDailyWeatherView(weatherJson)
+            } else {
+                runOnUiThread {
+                    Toast.makeText(this, "Error while fetching data", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
@@ -130,7 +134,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 10 && resultCode == RESULT_OK) {
-            Log.d("Test2", "Ahiy")
             val cityName = data?.extras?.getString("city")
             if (cityName != null && !isCityNamesSame(cityName)) {
                 changeLocation(cityName)

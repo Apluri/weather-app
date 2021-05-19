@@ -23,7 +23,6 @@ class SettingsActivity : AppCompatActivity() {
     fun save(view : View) {
         if (city.text.isNotEmpty()) {
             val intent = Intent()
-            Log.d("Test2", city.text.toString())
             intent.putExtra("city", city.text.toString())
             setResult(RESULT_OK, intent)
             finish()
