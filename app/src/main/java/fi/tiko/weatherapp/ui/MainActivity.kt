@@ -52,8 +52,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // current weather view is the upper section of the main activity
     private fun updateCurrentWeatherView(weatherJson : WeatherJsonObject) {
-        val temp = weatherJson.current?.temp?.toInt().toString() // remove decimals
+        val temp = weatherJson.current?.temp?.toInt().toString()  + "°C"// remove decimals
         val updateTime = weatherJson.current?.getUpdateTime()
         val icon = weatherJson.current?.weather?.get(0)?.icon
         val sunrise = "Sunrise: " + weatherJson.current?.getSunriseTime()
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    // updates the lower section of the main activity
     private fun updateDailyWeatherView(weatherJson : WeatherJsonObject) {
         var forecastList = mutableListOf<WeatherRowModel>()
 
@@ -129,6 +130,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 10 && resultCode == RESULT_OK) {
+            Log.d("Test2", "Ahiy")
             val cityName = data?.extras?.getString("city")
             if (cityName != null && !isCityNamesSame(cityName)) {
                 changeLocation(cityName)

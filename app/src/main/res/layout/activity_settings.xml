@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="25dp"
-    android:background="@drawable/bkimage">
+    android:background="@drawable/bkimage2">
 
     <LinearLayout
         android:id="@+id/mainContainer"
@@ -28,7 +28,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="name of city"
+                    android:textColor="@color/white"
+                    android:hint="Name of city"
                     />
                 <ImageView
                     android:layout_width="40dp"
@@ -38,14 +39,7 @@
 
             </LinearLayout>
 
-
-
-
         </LinearLayout>
-
-
-
-
 
         <Button
             android:id="@+id/button"
@@ -53,9 +47,5 @@
             android:layout_height="wrap_content"
             android:onClick="save"
             android:text="Save" />
-
-
     </LinearLayout>
-
-
 </RelativeLayout>

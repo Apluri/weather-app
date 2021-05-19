@@ -17,15 +17,19 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        Log.d("Test1", "Settings opened")
         city = findViewById(R.id.editCity)
     }
 
     fun save(view : View) {
-        val intent = Intent()
-        intent.putExtra("city", city.text.toString())
-        setResult(RESULT_OK, intent)
-        finish()
+        if (city.text.isNotEmpty()) {
+            val intent = Intent()
+            Log.d("Test2", city.text.toString())
+            intent.putExtra("city", city.text.toString())
+            setResult(RESULT_OK, intent)
+            finish()
+        } else {
+            onBackPressed()
+        }
     }
 
     fun getLocation(view : View) {

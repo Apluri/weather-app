@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="25dp"
-    android:background="@drawable/bkimage">
+    android:background="@drawable/bkimage2">
 
     <RelativeLayout
         android:id="@+id/mainContainer"
@@ -25,15 +25,16 @@
                 android:layout_height="wrap_content"
                 android:textSize="24dp"
                 android:layout_gravity="center"
-                android:text="Loading.." />
+                android:text="Trying to load location.." />
 
 
             <TextView
                 android:id="@+id/updated_at"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:textSize="14dp"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
                 android:layout_gravity="center"
-                android:text="Please set city manually if GPS is not enabled" />
+                android:text="Set city manually if location service is disabled" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -104,7 +105,7 @@
                android:layout_height="match_parent"
                android:id="@+id/dailyList"
                >
-               <!-- row comes here xml here -->
+               <!-- row xml comes here -->
            </ListView>
 
 
