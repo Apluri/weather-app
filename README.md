@@ -2,21 +2,24 @@
 
 # Topic: Weather application to display weather of your location.
 
+- Display current weather
+- Display forecast for one week
+- Change location for forecast
+- Use GPS location
+
 ## API used
 
 - Weather API https://openweathermap.org/api
 
-## Possible list of extra features:
-
-- Future weather
-- Different location
-- Small widget to homescreen to display weather or to notification bar
-
 # Target: Android/Kotlin
+
+# Screencast
+
+[Youtube](https://youtu.be/YZyO4E06L6s)
 
 # Google Play link:
 
-[Weather app](#) (will be updated when ready)
+[Weather app](#) (Not published)
 
 # Release1 features:
 
@@ -26,4 +29,19 @@
 
 ## Release1 screenshot
 
-![Release1 mainscreen](demoImages/mainActivityRelease1.jpg?raw=true)
+![Release1 MainActivity](demoImages/mainActivityRelease1.jpg?raw=true)
+
+# Release2 features:
+
+- Change location by typing city name or by mobile location
+- UI improvements
+- Error messages for user (for example incorrectly typed cities)
+
+## Release2 screenshots
+
+![Release2 MainActivity](demoImages/mainActivityRelease2.jpg?raw=true)
+![Release2 SettingsActivity](demoImages/settingsActivityRelease2.jpg?raw=true)
+
+# Known bugs
+
+- If application fails to find user location UI will not display any weather info
