@@ -4,7 +4,6 @@ import android.content.Intent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import fi.tiko.weatherapp.R
@@ -32,7 +31,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     fun getLocation(view : View) {
-        LocationData(this,this).getLastLocation { _, city ->
+        LocationData(this,this).getLastKnownLocation { _, city ->
             this.city.setText(city)
         }
     }

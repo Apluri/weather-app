@@ -13,67 +13,41 @@ import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 import java.util.*
 
-class LocationData(val context : Context, val activity: Activity) {
+class LocationData(private val mainContext : Context, private val activity: Activity) {
     private val PERMISSION_ID = 80
-    private val fusedLocationProviderClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
-    private lateinit var locationRequest : LocationRequest
+    private val fusedLocationProviderClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mainContext)
 
-
-    // tries to get last known location, if success then calls lamda with location
-    fun getLastLocation(callback : (location : Location, city : String) -> Unit) {
+    fun getLastKnownLocation(callback : (location : Location, city : String) -> Unit) {
         if (checkLocationPermissions()) {
             if (isLocationEnabled()) {
                 fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
                     val location : Location? = task.result
-                    if (location == null) {
-                        getNewLocation()
-                    } else {
-                        callback(location, getCityName(location))
-                    }
+                    if (location != null) callback(location, getCityName(location))
                 }
             } else {
-                Toast.makeText(context, "Please enable your location service", Toast.LENGTH_SHORT).show()
+                Toast.makeText(mainContext, "Please enable your location service", Toast.LENGTH_SHORT).show()
             }
         } else {
             requestLocationPermission()
         }
     }
 
-    fun getCityName(location : Location) : String {
+    private fun getCityName(location : Location) : String {
         var city = ""
-        var geoCoder = Geocoder(context, Locale.getDefault())
+        var geoCoder = Geocoder(mainContext, Locale.getDefault())
         var address = geoCoder.getFromLocation(location.latitude, location.longitude, 1)
 
-        city = address.get(0).locality
+        city = address[0].locality
         return city
-    }
-
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(p0: LocationResult) {
-            var lastLocation : Location = p0.lastLocation
-            // callback(lastLocation)
-            super.onLocationResult(p0)
-        }
-    }
-    private fun getNewLocation() {
-        locationRequest = LocationRequest()
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 0
-        locationRequest.fastestInterval = 0
-        locationRequest.numUpdates = 2
-        fusedLocationProviderClient!!.requestLocationUpdates(
-            locationRequest, locationCallback, Looper.myLooper()
-        )
     }
 
     private fun checkLocationPermissions():Boolean {
         if (
-            ActivityCompat.checkSelfPermission(context,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-            ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            ActivityCompat.checkSelfPermission(mainContext,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(mainContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
         ) {
             return true
         }
-
         return false
     }
 

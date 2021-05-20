@@ -4,7 +4,6 @@ import android.content.Intent
 import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import com.bumptech.glide.Glide
@@ -13,12 +12,12 @@ import fi.tiko.weatherapp.data.EnvironmentVariables
 import fi.tiko.weatherapp.data.LocationData
 import fi.tiko.weatherapp.data.Request
 import fi.tiko.weatherapp.data.weatherJsonFiles.WeatherJsonObject
-import java.lang.Exception
 import java.util.*
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     private val apiKey = EnvironmentVariables().apiKey
+    private val settingsResultCode = 10
 
     var city : String = ""
     var latitude : Double = 0.0
@@ -28,8 +27,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // TODO implement scenarios when gps data fails
-         LocationData(this,this).getLastLocation {  location, city ->
+         LocationData(this,this).getLastKnownLocation { location, city ->
              latitude = location.latitude
              longitude = location.longitude
              this.city = city
@@ -41,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private fun getIconUrl(icon : String) : String {
         return "https://openweathermap.org/img/wn/$icon@2x.png"
     }
+
     private fun updateUi() {
         thread {
             val weatherJson : WeatherJsonObject? = Request("https://api.openweathermap.org/data/2.5/onecall?lat=$latitude&lon=$longitude&units=metric&exclude=minutely,hourly,alerts&appid=$apiKey")
@@ -116,7 +115,7 @@ class MainActivity : AppCompatActivity() {
     }
     fun openSettings(view : View) {
         val intent = Intent(this, SettingsActivity::class.java)
-        startActivityForResult(intent, 10)
+        startActivityForResult(intent, settingsResultCode)
     }
 
     private fun changeLocation(cityName : String) {
@@ -133,7 +132,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 10 && resultCode == RESULT_OK) {
+        if (requestCode == settingsResultCode && resultCode == RESULT_OK) {
             val cityName = data?.extras?.getString("city")
             if (cityName != null && !isCityNamesSame(cityName)) {
                 changeLocation(cityName)
