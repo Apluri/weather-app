@@ -10,6 +10,7 @@
 ## API used
 
 - Weather API https://openweathermap.org/api
+- Temporary key that you can use in evaluation / testing: 39600443ee5d6c37e1cc907eb6af0f92
 
 # Target: Android/Kotlin
 
