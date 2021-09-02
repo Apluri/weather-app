@@ -1,5 +1,3 @@
-# Name: Aleksi Hietala
-
 # Topic: Weather application to display weather of your location.
 
 - Display current weather
@@ -10,17 +8,8 @@
 ## API used
 
 - Weather API https://openweathermap.org/api
-- Temporary key that you can use in evaluation / testing: 39600443ee5d6c37e1cc907eb6af0f92
 
 # Target: Android/Kotlin
-
-# Screencast
-
-[Youtube](https://youtu.be/YZyO4E06L6s)
-
-# Google Play link:
-
-[Weather app](#) (Not published)
 
 # Release1 features:
 
